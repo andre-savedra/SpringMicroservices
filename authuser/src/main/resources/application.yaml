@@ -1,0 +1,25 @@
+server:
+  port: 8087
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ead-authuser
+    username: postgres
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update #enable auto update from models
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      jdbc:
+        lob.non-contextual-creation: true #avoid erros
+    properties:
+      hibernate:
+        show_sql: true #show database
+
+logging:
+  level:
+    com.ead: TRACE
+    root: INFO
+    org.springframework.web: DEBUG
+    org.hibernate: INFO
+

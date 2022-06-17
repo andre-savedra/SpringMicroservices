@@ -1,0 +1,77 @@
+package com.ead.course.services.impl;
+
+import com.ead.course.models.CourseModel;
+import com.ead.course.models.LessonModel;
+import com.ead.course.models.ModuleModel;
+import com.ead.course.repositories.CourseRepository;
+import com.ead.course.repositories.LessonRepository;
+import com.ead.course.repositories.ModuleRepository;
+import com.ead.course.services.CourseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
+public class CourseServiceImpl implements CourseService {
+    @Autowired
+    CourseRepository courseRepository;
+
+    @Autowired
+    ModuleRepository moduleRepository;
+
+    @Autowired
+    LessonRepository lessonRepository;
+
+
+    //this method was created with the purpose to make a deletion with high performance instead the default
+    //annotations of delete
+
+    @Transactional //make the delete but if a problem happens return to the initial state of data
+    @Override
+    public void delete(CourseModel courseModel) {
+        List<ModuleModel> moduleModelList = moduleRepository.findAllModulesIntoCourse(courseModel.getCourseId());
+
+        if(!moduleModelList.isEmpty()){
+            for(ModuleModel module : moduleModelList){
+                List<LessonModel> lessonModelList = lessonRepository.findAllLessonsIntoModule(module.getModuleId());
+
+                if(!lessonModelList.isEmpty()){
+                    lessonRepository.deleteAll(lessonModelList);
+                }
+            }
+            moduleRepository.deleteAll(moduleModelList);
+        }
+        courseRepository.delete(courseModel);
+    }
+
+    @Override
+    public CourseModel save(CourseModel courseModel) {
+        return courseRepository.save(courseModel);
+    }
+
+    @Override
+    public Optional<CourseModel> findById(UUID courseId) {
+        return courseRepository.findById(courseId);
+    }
+
+//    can be used Specification argument in two ways:
+//    SpecificationTemplate.CourseSpec spec (where CourseSpec is the name given in Spectification template)
+//    Specification<CourseModel> spec (referencying the class is better because if someone changes the name of spec
+//    there isn't any problem)
+    @Override
+    public Page<CourseModel> findAll(Specification<CourseModel> spec, Pageable pageable) {
+        return courseRepository.findAll(spec,pageable);
+    }
+
+    @Override
+    public List<CourseModel> findAll() {
+        return courseRepository.findAll();
+    }
+}
