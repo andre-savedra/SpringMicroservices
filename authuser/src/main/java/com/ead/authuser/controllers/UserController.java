@@ -36,11 +36,20 @@ public class UserController {
     UserService userService;
 
     //when called route /users will get them with http status ok = 200
+    //MODIFIED ADD PARAM COURSEID TO API COMPOSITION PATTERN:
     @GetMapping
     public ResponseEntity<Page<UserModel>> getAllUsers( SpecificationTemplate.UserSpec spec,
                                             @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC)
-                                            Pageable pageable){
-        Page<UserModel> userModelPage = userService.findAll(spec, pageable);
+                                            Pageable pageable,
+                                            @RequestParam(required = false) UUID courseId){
+        Page<UserModel> userModelPage = null;
+
+        if(courseId != null) {
+            userModelPage = userService.findAll(SpecificationTemplate.userCourseId(courseId).and(spec), pageable);
+        }
+        else {
+            userModelPage = userService.findAll(spec, pageable);
+        }
 
         //if not empty will add link (hateoas) to the specific user clicked on
         if(!userModelPage.isEmpty()){
@@ -130,6 +139,7 @@ public class UserController {
             userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
             userService.save(userModel);
             return ResponseEntity.status(HttpStatus.OK).body(userModel);
+
         }
     }
 }
