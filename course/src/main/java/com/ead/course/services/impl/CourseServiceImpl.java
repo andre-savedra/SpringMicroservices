@@ -1,9 +1,11 @@
 package com.ead.course.services.impl;
 
 import com.ead.course.models.CourseModel;
+import com.ead.course.models.CourseUserModel;
 import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
 import com.ead.course.repositories.CourseRepository;
+import com.ead.course.repositories.CourseUserRepository;
 import com.ead.course.repositories.LessonRepository;
 import com.ead.course.repositories.ModuleRepository;
 import com.ead.course.services.CourseService;
@@ -29,6 +31,9 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     LessonRepository lessonRepository;
 
+    @Autowired
+    CourseUserRepository courseUserRepository;
+
 
     //this method was created with the purpose to make a deletion with high performance instead the default
     //annotations of delete
@@ -48,6 +53,10 @@ public class CourseServiceImpl implements CourseService {
             }
             moduleRepository.deleteAll(moduleModelList);
         }
+        List<CourseUserModel> courseUserModelList = courseUserRepository.findAllCourseUserIntoCourse(courseModel.getCourseId());
+        if(!courseUserModelList.isEmpty()){
+            courseUserRepository.deleteAll(courseUserModelList);
+        }
         courseRepository.delete(courseModel);
     }
 
@@ -62,8 +71,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
 //    can be used Specification argument in two ways:
-//    SpecificationTemplate.CourseSpec spec (where CourseSpec is the name given in Spectification template)
-//    Specification<CourseModel> spec (referencying the class is better because if someone changes the name of spec
+//    SpecificationTemplate.CourseSpec spec (where CourseSpec is the name given in Specification template)
+//    Specification<CourseModel> spec (referencing the class is better because if someone changes the name of spec
 //    there isn't any problem)
     @Override
     public Page<CourseModel> findAll(Specification<CourseModel> spec, Pageable pageable) {
