@@ -60,7 +60,7 @@ public class CourseModel implements Serializable {
         List-> ordered, not unique
         Set -> not ordered, unique
        But in Jpa there is another difference: in a model with many relationships of collections, using
-       List the Jpa will can return just one collection...
+       List the Jpa will return just one collection...
        However, the Set can be returned in multiple relationships of collections.
        In this example we just have one module collection, but we must prepare the project to receive more in
        the future.
@@ -104,4 +104,9 @@ public class CourseModel implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<CourseUserModel> coursesUsers;
 
+
+    //method to convert courseModel in courseUserModel
+    public CourseUserModel convertToCourseUserModel(UUID userID){
+        return new CourseUserModel(null, userID, this);
+    }
 }

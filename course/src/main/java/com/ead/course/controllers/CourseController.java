@@ -21,6 +21,7 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Log4j2
 @RestController
@@ -56,6 +57,7 @@ public class CourseController {
     @PutMapping("/{courseId}")
     public ResponseEntity<Object> updateCourse(@PathVariable(value="courseId") UUID courseId,
                                                @RequestBody @Valid CourseDto courseDto){
+
         Optional<CourseModel> courseModelOptional = courseService.findById(courseId);
 
         if(!courseModelOptional.isPresent()){

@@ -39,7 +39,8 @@ public class UserController {
     //MODIFIED ADD PARAM COURSEID TO API COMPOSITION PATTERN:
     @GetMapping
     public ResponseEntity<Page<UserModel>> getAllUsers( SpecificationTemplate.UserSpec spec,
-                                            @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC)
+                                            @PageableDefault(page = 0, size = 10, sort = "userId",
+                                                    direction = Sort.Direction.ASC)
                                             Pageable pageable,
                                             @RequestParam(required = false) UUID courseId){
         Page<UserModel> userModelPage = null;
