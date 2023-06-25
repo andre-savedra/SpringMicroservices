@@ -16,10 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,16 +39,9 @@ public class UserController {
     public ResponseEntity<Page<UserModel>> getAllUsers( SpecificationTemplate.UserSpec spec,
                                             @PageableDefault(page = 0, size = 10, sort = "userId",
                                                     direction = Sort.Direction.ASC)
-                                            Pageable pageable,
-                                            @RequestParam(required = false) UUID courseId){
-        Page<UserModel> userModelPage = null;
+                                            Pageable pageable){
 
-        if(courseId != null) {
-            userModelPage = userService.findAll(SpecificationTemplate.userCourseId(courseId).and(spec), pageable);
-        }
-        else {
-            userModelPage = userService.findAll(spec, pageable);
-        }
+        Page<UserModel> userModelPage = userService.findAll(spec, pageable);
 
         //if not empty will add link (hateoas) to the specific user clicked on
         if(!userModelPage.isEmpty()){

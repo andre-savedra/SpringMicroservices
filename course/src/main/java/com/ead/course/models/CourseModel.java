@@ -99,14 +99,4 @@ public class CourseModel implements Serializable {
      if we don't choose any FetchMode, the default is JOIN and not ignore the FetchType
     * */
     private Set<ModuleModel> modules;
-
-    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private Set<CourseUserModel> coursesUsers;
-
-
-    //method to convert courseModel in courseUserModel
-    public CourseUserModel convertToCourseUserModel(UUID userID){
-        return new CourseUserModel(null, userID, this);
-    }
 }
