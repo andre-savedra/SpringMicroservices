@@ -4,10 +4,12 @@ server:
     context-path: '/ead-authuser/'
 
 spring:
+  rabbitmq:
+    addresses: amqps://awbmtduh:7a2eDXaxkqDBsFFo0gxboRE7kFdphhAs@toad.rmq.cloudamqp.com/awbmtduh
   application:
     name: ead-authuser-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/ead-authuser
+    url: jdbc:postgresql://localhost:5432/ead-authuser-v2
     username: postgres
     password: root
   jpa:

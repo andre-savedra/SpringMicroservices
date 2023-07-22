@@ -99,4 +99,13 @@ public class CourseModel implements Serializable {
      if we don't choose any FetchMode, the default is JOIN and not ignore the FetchType
     * */
     private Set<ModuleModel> modules;
+
+    /* to create many to many we need to create an intermediary table, but hibernate makes it automatically with
+    * this annotation */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "TB_COURSES_USERS",
+               joinColumns = @JoinColumn(name = "course_id"),
+               inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<UserModel> users;
 }

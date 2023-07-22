@@ -4,10 +4,12 @@ server:
    context-path: '/ead-course/'
 
 spring:
+  rabbitmq:
+    addresses: amqps://awbmtduh:7a2eDXaxkqDBsFFo0gxboRE7kFdphhAs@toad.rmq.cloudamqp.com/awbmtduh
   application:
     name: ead-course-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/ead-course
+    url: jdbc:postgresql://localhost:5432/ead-course-v2
     username: postgres
     password: root
   jpa:
